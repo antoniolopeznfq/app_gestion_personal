@@ -1,0 +1,102 @@
+/* css/styles.css */
+
+:root {
+    /* Paleta Corporativa BBVA */
+    --bbva-navy: #072146;      /* Azul Oscuro (Fondo Navbar) */
+    --bbva-medium-blue: #1973B8; /* Azul Medio (Detalles) */
+    --bbva-aqua: #2DCCCD;      /* Turquesa (Botones de acción) */
+    --bbva-white: #FFFFFF;
+
+    --bg-color: #f4f4f4;       /* Fondo gris suave */
+    --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+body {
+    background-color: var(--bg-color);
+    font-family: 'Benton Sans', 'Segoe UI', sans-serif;
+}
+
+/* --- NAVBAR --- */
+.navbar {
+    background-color: var(--bbva-navy) !important;
+    padding: 0.8rem 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    cursor: pointer; /* Manita al pasar el ratón */
+    color: var(--bbva-white) !important;
+}
+
+/* Ajuste de logos */
+.navbar-logo {
+    height: 30px; /* Tamaño controlado */
+    width: auto;
+}
+
+.divider {
+    color: rgba(255,255,255,0.4);
+    font-size: 24px;
+    font-weight: 300;
+    margin: 0 15px;
+}
+
+/* Texto del título */
+.app-title {
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    margin-left: 10px;
+}
+
+/* --- TARJETAS --- */
+.card {
+    box-shadow: var(--card-shadow);
+    border: none;
+    border-radius: 2px; /* Bordes más rectos estilo corporativo */
+    background-color: white;
+}
+
+/* --- TABS (PESTAÑAS) --- */
+.nav-tabs .nav-link {
+    color: #666;
+    border: none;
+    font-weight: 600;
+    padding: 12px 25px;
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--bbva-navy);
+    border-bottom: 3px solid var(--bbva-medium-blue);
+    background-color: transparent;
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--bbva-medium-blue);
+    background-color: rgba(25, 115, 184, 0.05);
+}
+
+/* --- BOTONES --- */
+/* Estilo botón BBVA "Aqua" */
+.btn-success {
+    background-color: var(--bbva-aqua);
+    border-color: var(--bbva-aqua);
+    color: var(--bbva-navy); /* Texto oscuro sobre fondo turquesa */
+    font-weight: 700;
+    border-radius: 2px;
+}
+
+.btn-success:hover {
+    background-color: #24b2b3;
+    border-color: #24b2b3;
+    color: var(--bbva-navy);
+}
+
+/* Utilidades */
+.loading {
+    display: none;
+    text-align: center;
+    padding: 30px;
+}
