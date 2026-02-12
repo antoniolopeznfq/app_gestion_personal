@@ -31,6 +31,6 @@ public class EmployeeOutputDto {
     @Schema(description = "Salario bruto anual")
     private Double salary;
 
-    @Schema(description = "Proyectos asignados")
-    private List<String> projects;
+    @Schema(description = "Detalles de los proyectos asignados")
+    private List<ProjectOutputDto> projects;
 }

@@ -27,6 +27,6 @@ public class EmployeeInputDto {
     @Schema(description = "Salario bruto anual", example = "24000.00")
     private Double salary;
 
-    @Schema(description = "Proyectos en los que trabaja", example = "[\"App Gestión\", \"Migración Cloud\"]")
-    private List<String> projects;
+    @Schema(description = "Lista de IDs de los proyectos asignados", example = "[\"65df...\", \"65de...\"]")
+    private List<String> projectIds;
 }

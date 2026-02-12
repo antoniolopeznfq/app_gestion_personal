@@ -21,5 +21,5 @@ public class Employee {
     private String email;
     private String position;
     private Double salary;
-    private List<String> projects;
+    private List<String> projectIds;
 }

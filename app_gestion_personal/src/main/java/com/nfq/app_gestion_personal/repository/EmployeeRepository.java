@@ -11,7 +11,6 @@ import java.util.Optional;
  * Capa de Persistencia (Repositorio).
  * Extiende de MongoRepository, lo que nos da acceso a métodos como:
  * save(), findAll(), findById(), deleteById(), etc.
- *
  * <Employee, String>: Indicamos que gestiona la entidad 'Employee' y su ID es tipo 'String'.
  */
 @Repository // Indica a Spring que esto es un componente de acceso a datos (y gestiona sus errores).
@@ -32,4 +31,7 @@ public interface EmployeeRepository extends MongoRepository<Employee, String> {
 
     // Buscar por puesto Y ordenar por salario descendente
     List<Employee> findByPositionOrderBySalaryDesc(String position);
+
+    // Buscar por proyectos
+    List<Employee> findByProjectIds(String projectId);
 }

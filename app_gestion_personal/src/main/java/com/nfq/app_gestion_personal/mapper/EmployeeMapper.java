@@ -18,6 +18,7 @@ public interface EmployeeMapper {
      * Convierte de DTO de entrada a Entidad de base de datos.
      * * @Mapping(target = "id", ignore = true): Ignora el campo 'id' porque el InputDto no lo tiene y la Entidad lo generará sola.
      */
+    @Mapping(target = "projectIds", source = "projectIds")
     @Mapping(target = "id", ignore = true)
     Employee toEntity(EmployeeInputDto inputDto);
 
@@ -25,5 +26,6 @@ public interface EmployeeMapper {
      * Convierte de Entidad de base de datos a DTO de salida.
      * MapStruct empareja automáticamente los campos que se llamen igual (name -> name, etc.)
      */
+    @Mapping(target = "projects", ignore = true)
     EmployeeOutputDto toOutput(Employee entity);
 }
