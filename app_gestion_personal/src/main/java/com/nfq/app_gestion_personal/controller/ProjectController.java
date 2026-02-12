@@ -44,4 +44,10 @@ public class ProjectController {
         projectService.deleteProject(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Actualizar proyecto", description = "Actualiza los datos de un proyecto existente")
+    @PutMapping("/{id}")
+    public ResponseEntity<ProjectOutputDto> updateProject(@PathVariable String id, @RequestBody ProjectInputDto input) {
+        return ResponseEntity.ok(projectService.updateProject(id, input));
+    }
 }

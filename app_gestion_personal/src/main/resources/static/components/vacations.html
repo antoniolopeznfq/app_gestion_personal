@@ -1,16 +1,88 @@
 <div class="card p-4 fade-in">
-  <h5 class="fw-bold text-secondary mb-3">SOLICITUDES DE VACACIONES</h5>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="fw-bold text-secondary">SOLICITUDES DE VACACIONES</h5>
+    <button class="btn btn-success btn-sm px-3" onclick="window.openCreateVacationModal()">
+      <i class="bi bi-plus-lg me-1"></i> Nueva Solicitud
+    </button>
+  </div>
   <div class="table-responsive">
-    <table class="table table-striped align-middle">
+    <table class="table table-hover align-middle">
       <thead class="table-light" style="border-top: 2px solid var(--bbva-medium-blue);">
       <tr>
         <th>ID Colaborador</th>
-        <th>Desde</th>
-        <th>Hasta</th>
-        <th>Observaciones</th>
+        <th>Periodo</th>
+        <th>Comentarios</th>
+        <th class="text-end">Acciones</th>
       </tr>
       </thead>
       <tbody id="vacationsTableBody"></tbody>
     </table>
+    <div id="loadingVacations" class="loading">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="vacationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header text-white" style="background-color: var(--bbva-navy);">
+        <h5 class="modal-title" id="vacationModalLabel">Solicitud de Vacaciones</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="vacationForm">
+          <input type="hidden" id="vacationId">
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">ID del Empleado</label>
+            <input type="text" class="form-control" id="vacationEmployeeId" placeholder="Ej. 65df..." required>
+            <div class="form-text">Copia el ID de la pestaña de Empleados.</div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Desde</label>
+              <input type="date" class="form-control" id="vacationStartDate" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold">Hasta</label>
+              <input type="date" class="form-control" id="vacationEndDate" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Observaciones</label>
+            <textarea class="form-control" id="vacationComments" rows="2" placeholder="Ej. Vacaciones de verano..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" onclick="window.saveVacation()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deleteVacationModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Cancelar Solicitud</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center p-4">
+        <i class="bi bi-exclamation-circle text-danger display-4 mb-3"></i>
+        <p>¿Seguro que deseas cancelar esta solicitud de vacaciones?</p>
+        <small class="text-muted">Esta acción es irreversible.</small>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">No, mantener</button>
+        <button type="button" class="btn btn-danger px-4" onclick="window.confirmDeleteVacation()">
+          Sí, cancelar
+        </button>
+      </div>
+    </div>
   </div>
 </div>

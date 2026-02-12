@@ -1,8 +1,8 @@
 import { loadComponent } from './router.js';
 import { loadEmployees, openCreateModal, openEditModal, saveEmployee, openDeleteModal, confirmDelete } from './employees.js';
-// IMPORTAR NUEVAS FUNCIONES
 import { loadProjects, openCreateProjectModal, openEditProjectModal, saveProject, openDeleteProjectModal, confirmDeleteProject } from './projects.js';
-import { loadVacations } from './vacations.js';
+// IMPORTAR VACACIONES
+import { loadVacations, openCreateVacationModal, openEditVacationModal, saveVacation, openDeleteVacationModal, confirmDeleteVacation } from './vacations.js';
 
 // --- EXPONER FUNCIONES AL HTML (GLOBAL SCOPE) ---
 
@@ -24,9 +24,13 @@ window.saveProject = saveProject;
 window.openDeleteProjectModal = openDeleteProjectModal;
 window.confirmDeleteProject = confirmDeleteProject;
 
-// VACACIONES
+// VACACIONES (NUEVO)
 window.loadVacations = loadVacations;
-
+window.openCreateVacationModal = openCreateVacationModal;
+window.openEditVacationModal = openEditVacationModal;
+window.saveVacation = saveVacation;
+window.openDeleteVacationModal = openDeleteVacationModal;
+window.confirmDeleteVacation = confirmDeleteVacation;
 
 // --- INICIALIZACIÓN ---
 document.addEventListener('DOMContentLoaded', () => {

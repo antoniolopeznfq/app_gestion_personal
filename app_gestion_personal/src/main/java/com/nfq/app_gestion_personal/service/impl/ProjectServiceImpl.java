@@ -57,4 +57,21 @@ public class ProjectServiceImpl implements ProjectService {
         }
         projectRepository.deleteById(id);
     }
+
+    @Override
+    public ProjectOutputDto updateProject(String id, ProjectInputDto inputDto) {
+        Project existingProject = projectRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Proyecto no encontrado con ID: " + id));
+
+        // Actualizamos campos
+        existingProject.setName(inputDto.getName());
+        existingProject.setDescription(inputDto.getDescription());
+        existingProject.setStartDate(inputDto.getStartDate());
+        existingProject.setDepartment(inputDto.getDepartment());
+
+        // Guardamos
+        Project updatedProject = projectRepository.save(existingProject);
+
+        return projectMapper.toOutput(updatedProject);
+    }
 }

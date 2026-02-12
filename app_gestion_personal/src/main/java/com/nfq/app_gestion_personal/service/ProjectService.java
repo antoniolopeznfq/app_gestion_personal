@@ -6,8 +6,14 @@ import com.nfq.app_gestion_personal.dto.ProjectOutputDto;
 import java.util.List;
 
 public interface ProjectService {
+
     ProjectOutputDto createProject(ProjectInputDto inputDto);
+
     List<ProjectOutputDto> getAllProjects();
+
     ProjectOutputDto getProjectById(String id);
+
+    ProjectOutputDto updateProject(String id, ProjectInputDto inputDto);
+
     void deleteProject(String id);
 }
