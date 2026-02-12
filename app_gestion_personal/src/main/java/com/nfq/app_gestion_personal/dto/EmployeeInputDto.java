@@ -3,6 +3,8 @@ package com.nfq.app_gestion_personal.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * DTO de Entrada.
  * Representa los datos que el cliente nos envía para crear un empleado.
@@ -24,4 +26,7 @@ public class EmployeeInputDto {
 
     @Schema(description = "Salario bruto anual", example = "24000.00")
     private Double salary;
+
+    @Schema(description = "Proyectos en los que trabaja", example = "[\"App Gestión\", \"Migración Cloud\"]")
+    private List<String> projects;
 }

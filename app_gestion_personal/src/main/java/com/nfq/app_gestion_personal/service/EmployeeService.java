@@ -18,4 +18,6 @@ public interface EmployeeService {
     void deleteEmployee(String id);
 
     EmployeeOutputDto getEmployeeById(String id);
+
+    EmployeeOutputDto updateEmployee(String id, EmployeeInputDto inputDto);
 }

@@ -3,12 +3,14 @@ package com.nfq.app_gestion_personal.mapper;
 import com.nfq.app_gestion_personal.dto.EmployeeInputDto;
 import com.nfq.app_gestion_personal.dto.EmployeeOutputDto;
 import com.nfq.app_gestion_personal.entity.Employee;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-11T10:26:41+0100",
+    date = "2026-02-12T12:37:45+0100",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 11.0.30 (Microsoft)"
 )
 @Component
@@ -27,6 +29,10 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employee.setEmail( inputDto.getEmail() );
         employee.setPosition( inputDto.getPosition() );
         employee.setSalary( inputDto.getSalary() );
+        List<String> list = inputDto.getProjects();
+        if ( list != null ) {
+            employee.setProjects( new ArrayList<String>( list ) );
+        }
 
         return employee;
     }
@@ -45,6 +51,10 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employeeOutputDto.setEmail( entity.getEmail() );
         employeeOutputDto.setPosition( entity.getPosition() );
         employeeOutputDto.setSalary( entity.getSalary() );
+        List<String> list = entity.getProjects();
+        if ( list != null ) {
+            employeeOutputDto.setProjects( new ArrayList<String>( list ) );
+        }
 
         return employeeOutputDto;
     }

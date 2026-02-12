@@ -50,4 +50,10 @@ public class EmployeeController {
         // Devolvemos 204 (NO CONTENT) porque el borrado ha sido exitoso y no hay nada que devolver
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(summary = "Actualizar empleado", description = "Actualiza los datos de un empleado existente")
+    @PutMapping("/{id}")
+    public ResponseEntity<EmployeeOutputDto> updateEmployee(@PathVariable String id, @RequestBody EmployeeInputDto input) {
+        return ResponseEntity.ok(employeeService.updateEmployee(id, input));
+    }
 }

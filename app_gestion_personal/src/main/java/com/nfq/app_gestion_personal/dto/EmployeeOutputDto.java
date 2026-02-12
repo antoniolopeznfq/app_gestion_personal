@@ -3,6 +3,8 @@ package com.nfq.app_gestion_personal.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * DTO de Salida.
  * Representa los datos que enviamos de vuelta al cliente.
@@ -28,4 +30,7 @@ public class EmployeeOutputDto {
 
     @Schema(description = "Salario bruto anual")
     private Double salary;
+
+    @Schema(description = "Proyectos asignados")
+    private List<String> projects;
 }

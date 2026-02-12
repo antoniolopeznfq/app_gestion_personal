@@ -73,4 +73,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         // Delegamos el borrado en el repositorio
         employeeRepository.deleteById(id);
     }
+
+    @Override
+    public EmployeeOutputDto updateEmployee(String id, EmployeeInputDto inputDto) {
+        Employee existingEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Empleado no encontrado con ID: " + id));
+
+        existingEmployee.setName(inputDto.getName());
+        existingEmployee.setLastName(inputDto.getLastName());
+        existingEmployee.setEmail(inputDto.getEmail());
+        existingEmployee.setPosition(inputDto.getPosition());
+        existingEmployee.setSalary(inputDto.getSalary());
+        existingEmployee.setProjects(inputDto.getProjects());
+
+        Employee updatedEmployee = employeeRepository.save(existingEmployee);
+
+        return employeeMapper.toOutput(updatedEmployee);
+    }
 }

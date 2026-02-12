@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.List;
 
 @Data // Genera Getters, Setters, toString, equals, hashcode
 @NoArgsConstructor // Genera constructor vacío
@@ -20,4 +21,5 @@ public class Employee {
     private String email;
     private String position;
     private Double salary;
+    private List<String> projects;
 }
