@@ -20,8 +20,11 @@ export async function loadVacations() {
             fetch(`${API_BASE_URL}/employees`)
         ]);
 
-        if (!vacationsResponse.ok || !employeesResponse.ok) throw new Error('Error de conexión');
-
+        if (!vacationsResponse.ok || !employeesResponse.ok) {
+            console.error('Error en la respuesta del servidor');
+            tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error al obtener datos del servidor.</td></tr>';
+            return; // El bloque 'finally' se ejecutará igualmente para ocultar el loader
+        }
         const vacations = await vacationsResponse.json();
         const employees = await employeesResponse.json();
 
