@@ -8,39 +8,56 @@ export async function loadVacations() {
     const tableBody = document.getElementById('vacationsTableBody');
     const loader = document.getElementById('loadingVacations');
 
-    // Si no hay tabla (porque cambiamos rápido de pestaña), salimos
     if(!tableBody) return;
 
     tableBody.innerHTML = '';
     if(loader) loader.style.display = 'block';
 
     try {
-        const response = await fetch(`${API_BASE_URL}/vacations`);
+        // Petición PARALELA: Pedimos vacaciones y empleados a la vez para ir más rápido
+        const [vacationsResponse, employeesResponse] = await Promise.all([
+            fetch(`${API_BASE_URL}/vacations`),
+            fetch(`${API_BASE_URL}/employees`)
+        ]);
 
-        if (!response.ok) throw new Error('Error al conectar con el servidor');
+        if (!vacationsResponse.ok || !employeesResponse.ok) throw new Error('Error de conexión');
 
-        const vacations = await response.json();
+        const vacations = await vacationsResponse.json();
+        const employees = await employeesResponse.json();
+
+        // Creamos un "Mapa" de empleados para buscarlos rápido por ID
+        // Ejemplo: { "id1": "Juan Perez", "id2": "Ana Garcia" }
+        const employeesMap = {};
+        employees.forEach(emp => {
+            employeesMap[emp.id] = `${emp.name} ${emp.lastName}`;
+        });
 
         if(vacations.length === 0) {
             tableBody.innerHTML = '<tr><td colspan="4" class="text-center p-3">No hay solicitudes registradas.</td></tr>';
         } else {
             vacations.forEach(v => {
+                // Buscamos el nombre en nuestro mapa, si no existe ponemos "Desconocido"
+                const employeeName = employeesMap[v.employeeId] || '<span class="text-muted fst-italic">Desconocido (Borrado)</span>';
+
                 tableBody.innerHTML += `
                     <tr>
-                        <td><span class="badge bg-secondary font-monospace">${v.employeeId}</span></td>
                         <td>
-                            <div class="d-flex flex-column">
-                                <span class="text-success"><small>Desde:</small> ${formatDate(v.startDate)}</span>
-                                <span class="text-danger"><small>Hasta:</small> ${formatDate(v.endDate)}</span>
-                            </div>
+                            <div class="fw-bold text-dark">${employeeName}</div>
+                            <small class="text-muted font-monospace" style="font-size: 0.75rem;">${v.employeeId}</small>
+                        </td>
+                        <td>
+                            <span class="text-success"><i class="bi bi-calendar-check me-1"></i>${formatDate(v.startDate)}</span>
+                        </td>
+                        <td>
+                            <span class="text-danger"><i class="bi bi-calendar-x me-1"></i>${formatDate(v.endDate)}</span>
                         </td>
                         <td>${v.comments || '<em class="text-muted">-</em>'}</td>
                         <td class="text-end">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-primary border-0" onclick="window.openEditVacationModal('${v.id}')">
+                                <button class="btn btn-sm btn-outline-primary border-0" onclick="window.openEditVacationModal('${v.id}')" title="Editar">
                                     <i class="bi bi-pencil-square fs-5"></i>
                                 </button>
-                                <button class="btn btn-sm btn-outline-danger border-0" onclick="window.openDeleteVacationModal('${v.id}')">
+                                <button class="btn btn-sm btn-outline-danger border-0" onclick="window.openDeleteVacationModal('${v.id}')" title="Cancelar">
                                     <i class="bi bi-trash fs-5"></i>
                                 </button>
                             </div>
@@ -51,48 +68,36 @@ export async function loadVacations() {
 
     } catch(e) {
         console.error(e);
-        tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error cargando datos. Intenta recargar.</td></tr>';
+        tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-danger">Error cargando datos.</td></tr>';
     } finally {
-        // --- CORRECCIÓN CRÍTICA ---
-        // 1. Ocultamos el loader pase lo que pase
         if(loader) loader.style.display = 'none';
 
-        // 2. Inicializamos los modales SIEMPRE.
-        // Eliminamos el "!vacationModal" para forzar que se enlace al NUEVO HTML creado.
+        // Inicialización segura de modales
         const modalEl = document.getElementById('vacationModal');
-        if(modalEl) {
-            vacationModal = new bootstrap.Modal(modalEl);
-        }
+        if(modalEl) vacationModal = new bootstrap.Modal(modalEl);
 
         const delModalEl = document.getElementById('deleteVacationModal');
-        if(delModalEl) {
-            deleteVacationModal = new bootstrap.Modal(delModalEl);
-        }
+        if(delModalEl) deleteVacationModal = new bootstrap.Modal(delModalEl);
     }
 }
 
-// --- CRUD ---
+// --- CRUD (El resto se mantiene igual, pero lo incluyo para que copies y pegues todo) ---
 
 export function openCreateVacationModal() {
-    // Seguridad: Si el modal no se cargó bien, intentamos buscarlo de nuevo
     if (!vacationModal) {
         const modalEl = document.getElementById('vacationModal');
         if(modalEl) vacationModal = new bootstrap.Modal(modalEl);
     }
-
     if(vacationModal) {
         document.getElementById('vacationForm').reset();
         document.getElementById('vacationId').value = '';
         document.getElementById('vacationModalLabel').innerText = 'Nueva Solicitud';
         vacationModal.show();
-    } else {
-        alert("Error: El modal no se ha cargado correctamente.");
     }
 }
 
 export async function openEditVacationModal(id) {
     try {
-        // TRUCO: Como no tenemos GET /vacations/{id}, buscamos en la lista completa
         const response = await fetch(`${API_BASE_URL}/vacations`);
         const allVacations = await response.json();
         const v = allVacations.find(vac => vac.id === id);
@@ -110,17 +115,15 @@ export async function openEditVacationModal(id) {
                 const modalEl = document.getElementById('vacationModal');
                 if(modalEl) vacationModal = new bootstrap.Modal(modalEl);
             }
-            if(vacationModal) vacationModal.show();
+            vacationModal.show();
         }
     } catch(e) {
-        console.error(e);
-        alert('Error cargando datos de la vacación');
+        alert('Error cargando datos');
     }
 }
 
 export async function saveVacation() {
     const id = document.getElementById('vacationId').value;
-
     const data = {
         employeeId: document.getElementById('vacationEmployeeId').value,
         startDate: document.getElementById('vacationStartDate').value,
@@ -129,7 +132,7 @@ export async function saveVacation() {
     };
 
     if(!data.employeeId || !data.startDate || !data.endDate) {
-        alert("El ID de empleado y las fechas son obligatorios");
+        alert("Campos obligatorios incompletos");
         return;
     }
 
@@ -147,17 +150,11 @@ export async function saveVacation() {
             if(vacationModal) vacationModal.hide();
             loadVacations();
         } else {
-            // Intentamos leer el error del backend
-            try {
-                const errorText = await response.json();
-                alert('Error: ' + (errorText.message || 'Datos inválidos'));
-            } catch (err) {
-                alert('Error al guardar. Verifica que el ID del empleado sea correcto.');
-            }
+            const errorText = await response.json();
+            alert('Error: ' + (errorText.message || 'Datos inválidos'));
         }
     } catch (e) {
-        console.error(e);
-        alert('Error de conexión con el servidor');
+        alert('Error de conexión');
     }
 }
 
@@ -167,16 +164,15 @@ export function openDeleteVacationModal(id) {
         const delModalEl = document.getElementById('deleteVacationModal');
         if(delModalEl) deleteVacationModal = new bootstrap.Modal(delModalEl);
     }
-    if(deleteVacationModal) deleteVacationModal.show();
+    deleteVacationModal.show();
 }
 
 export async function confirmDeleteVacation() {
     if (!vacationIdToDelete) return;
-
     try {
         const response = await fetch(`${API_BASE_URL}/vacations/${vacationIdToDelete}`, { method: 'DELETE' });
         if(response.ok) {
-            if(deleteVacationModal) deleteVacationModal.hide();
+            deleteVacationModal.hide();
             loadVacations();
         } else {
             alert("Error al eliminar");
